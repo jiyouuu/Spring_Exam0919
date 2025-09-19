@@ -217,7 +217,7 @@
         
         <!-- 에러 메시지 -->
         <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}">
-            에러 메시지
+             에러 메시지
         </div>
         
         <!-- 로그아웃 메시지 -->
@@ -225,10 +225,11 @@
             로그아웃 메시지
         </div>
         
-        <!-- 성공 메시지 (회원가입 후) -->
-        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}">
-            성공 메시지
-        </div>
+		<!-- 성공 메시지 (회원가입 후)-->
+		<div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}">
+			 성공 메시지
+		</div>
+				 
         
         <!-- 로그인 폼 -->
         <form method="post" th:action="@{/login}">

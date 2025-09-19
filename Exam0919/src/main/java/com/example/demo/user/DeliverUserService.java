@@ -17,7 +17,7 @@ public class DeliverUserService {
 	public void register(UserRegistrationDto userRegistrationDto) {
 		// 이름 중복 검사 
 		if(this.userRepository.existsByUsername(userRegistrationDto.getUsername())) {
-			throw new DuplicateUserException("이미 존재하는 사용자명임 : " + userRegistrationDto.getUsername());
+			throw new DuplicateUserException("중복된 사용자명 : " + userRegistrationDto.getUsername(),userRegistrationDto);
 		}
 		
 		

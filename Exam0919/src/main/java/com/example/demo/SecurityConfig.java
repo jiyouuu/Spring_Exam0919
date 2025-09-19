@@ -68,14 +68,14 @@ public class SecurityConfig {
 						.usernameParameter("username")
 						.passwordParameter("password")
 						.defaultSuccessUrl("/", true) // ,true의 의미 : 항상 이 URL로 '리다이렉트' 강제화 
-						.failureUrl("/login?error=true") // 로그인 실패시 이동할 페이지
+						.failureUrl("/login?error=true") // 로그인 실패시 error 파라미터 전달 
 						.successHandler(successHandler)  // 성공 핸들러
 						.failureHandler(failureHandler)  // 실패 핸들러
 						.permitAll()
 						)
 				.logout(logout ->logout
 						.logoutUrl("/logout")
-						.logoutSuccessUrl("/login?logout=true")
+						.logoutSuccessUrl("/login?logout=true")   // 로그아웃 성공시 logout 파라미터 전달 
 						.invalidateHttpSession(true)	// 세션 무효화
 						.deleteCookies("JSESSIONID")  // 쿠키 삭제
 						.clearAuthentication(true)   //인증 정보 삭제
