@@ -1,0 +1,296 @@
+
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> 로그인 - QuickCat Express</title>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .login-container {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 50px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            animation: slideIn 0.8s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1rem;
+        }
+        
+        .character-message {
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .alert {
+            padding: 15px 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            text-align: center;
+        }
+        
+        .alert-error {
+            background: #ffebee;
+            color: #c62828;
+            border: 2px solid #ffcdd2;
+        }
+        
+        .alert-success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 2px solid #c8e6c9;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e1e8ed;
+            border-radius: 15px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #4ECDC4;
+            box-shadow: 0 0 15px rgba(78, 205, 196, 0.3);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #4ECDC4, #44A08D);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .form-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .form-links a {
+            color: #4ECDC4;
+            text-decoration: none;
+            font-weight: 500;
+            margin: 0 10px;
+        }
+        
+        .form-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .demo-accounts {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+        
+        .demo-accounts h4 {
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .demo-account {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .demo-account .role {
+            font-weight: 600;
+            color: #4ECDC4;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="header">
+            <div class="logo">🚀</div>
+            <h1>로그인</h1>
+            <p>다중우주 택배 서비스에 오신 것을 환영합니다!</p>
+        </div>
+        
+        <div class="character-message">
+            🐱 급하냥: "빨리빨리! 로그인해서 택배 관리를 시작해보세요!"
+        </div>
+        
+        <!-- 에러 메시지 -->
+        <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}">
+            에러 메시지
+        </div>
+        
+        <!-- 로그아웃 메시지 -->
+        <div th:if="${logoutMessage}" class="alert alert-success" th:text="${logoutMessage}">
+            로그아웃 메시지
+        </div>
+        
+        <!-- 성공 메시지 (회원가입 후) -->
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}">
+            성공 메시지
+        </div>
+        
+        <!-- 로그인 폼 -->
+        <form method="post" action="/login">
+            <div class="form-group">
+                <label for="username">🆔 아이디</label>
+                <input type="text" id="username" name="username" class="form-control" 
+                       placeholder="사용자 아이디를 입력하세요" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">🔐 비밀번호</label>
+                <input type="password" id="password" name="password" class="form-control" 
+                       placeholder="비밀번호를 입력하세요" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">
+                🚀 로그인하기
+            </button>
+        </form>
+        
+        <div class="form-links">
+            <a href="/register">✨ 회원가입</a>
+            <a href="/">🏠 홈으로</a>
+        </div>
+        
+        <!-- 데모 계정 안내 -->
+        <div class="demo-accounts">
+            <h4>🎮 테스트 계정</h4>
+            <div class="demo-account">
+                <span><strong>급하냥:</strong> quickcat / password123</span>
+                <span class="role">관리자</span>
+            </div>
+            <div class="demo-account">
+                <span><strong>바쁘개:</strong> busydog / password123</span>
+                <span class="role">검사관</span>
+            </div>
+            <div class="demo-account">
+                <span><strong>고객:</strong> customer / password123</span>
+                <span class="role">일반사용자</span>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 폼 제출 시 로딩 상태 표시
+        document.querySelector('form').addEventListener('submit', function() {
+            const submitBtn = document.querySelector('button[type="submit"]');
+            submitBtn.innerHTML = '🔄 로그인 중...';
+            submitBtn.disabled = true;
+        });
+        
+        // 데모 계정 클릭 시 자동 입력
+        document.querySelectorAll('.demo-account').forEach(account => {
+            account.addEventListener('click', function() {
+                const text = this.textContent;
+                const username = text.split(' / ').split(': ');
+                const password = text.split(' / ').split(' ');
+                
+                document.getElementById('username').value = username;
+                document.getElementById('password').value = password;
+            });
+        });
+    </script>
+</body>
+</html>

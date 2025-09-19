@@ -1,0 +1,184 @@
+<!-- error/character-error.html -->
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>캐릭터 이벤트 발생! - QuickCat Express</title>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .error-container {
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 50px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            animation: bounceIn 0.8s ease-out;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .character-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: wiggle 2s ease-in-out infinite;
+        }
+        
+        @keyframes wiggle {
+            0%, 7% { transform: rotateZ(0); }
+            15% { transform: rotateZ(-15deg); }
+            20% { transform: rotateZ(10deg); }
+            25% { transform: rotateZ(-10deg); }
+            30% { transform: rotateZ(6deg); }
+            35% { transform: rotateZ(-4deg); }
+            40%, 100% { transform: rotateZ(0); }
+        }
+        
+        .error-title {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .character-quote {
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        .error-message {
+            color: #666;
+            font-size: 1rem;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            margin: 10px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #4ECDC4, #44A08D);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .wafflebear-theme {
+            background: linear-gradient(135deg, #FF9A8B 0%, #A8E6CF 100%);
+        }
+        
+        .tosim-theme {
+            background: linear-gradient(135deg, #FEE140 0%, #FA709A 100%);
+        }
+    </style>
+</head>
+<body th:class="${errorType == 'wafflebear'} ? 'wafflebear-theme' : 'tosim-theme'">
+    <div class="error-container">
+        <div class="character-icon">
+            <span th:if="${errorType == 'wafflebear'}">🧸</span>
+            <span th:if="${errorType == 'tosim'}">🐰</span>
+        </div>
+        
+        <h1 class="error-title">
+            <span th:if="${errorType == 'wafflebear'}">와플곰의 실험 타임!</span>
+            <span th:if="${errorType == 'tosim'}">토심이의 감정 모드</span>
+        </h1>
+        
+        <div class="character-quote" th:text="${characterQuote}">
+            캐릭터 대사
+        </div>
+        
+        <div class="error-message" th:text="${errorMessage}">
+            에러 메시지
+        </div>
+        
+        <div th:if="${errorType == 'wafflebear'}">
+            <p style="color: #666; margin: 20px 0;">
+                와플곰이 택배를 실험 재료로 착각했습니다! 실험이 끝날 때까지 잠시 기다려주세요.
+            </p>
+        </div>
+        
+        <div th:if="${errorType == 'tosim'}">
+            <p style="color: #666; margin: 20px 0;">
+                토심이의 기분이 좋지 않네요. 토심이가 마음을 달래고 나서 다시 시도해주세요.
+            </p>
+        </div>
+        
+        <div>
+            <a href="/deliveries" class="btn btn-primary">
+                🏠 홈으로 돌아가기
+            </a>
+            <button onclick="window.history.back()" class="btn btn-secondary">
+                ↩️ 이전 페이지
+            </button>
+        </div>
+        
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #eee;">
+            <p style="color: #999; font-size: 0.9rem;">
+                💡 팁: 캐릭터들의 특별한 이벤트는 랜덤하게 발생합니다!
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        // 5초 후 자동으로 홈으로 이동하는 타이머 (선택사항)
+        let countdown = 10;
+        const timer = setInterval(() => {
+            countdown--;
+            if (countdown <= 0) {
+                clearInterval(timer);
+                window.location.href = '/deliveries';
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

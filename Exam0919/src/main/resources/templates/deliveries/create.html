@@ -1,0 +1,193 @@
+<!-- deliveries/create.html -->
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>새 배송 등록 - QuickCat Express</title>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e1e8ed;
+            border-radius: 15px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #4ECDC4;
+            box-shadow: 0 0 15px rgba(78, 205, 196, 0.3);
+        }
+        
+        .form-control.error {
+            border-color: #ff6b6b;
+        }
+        
+        .error-message {
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #4ECDC4, #44A08D);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        
+        .character-message {
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 새 배송 등록</h1>
+            <p>급하냥의 다중우주 택배 서비스</p>
+        </div>
+        
+        <div class="character-message">
+            🐱 급하냥: "빨리빨리! 새로운 배송을 등록해주세요! 다중우주 고객들이 기다리고 있어요!"
+        </div>
+        
+        <form th:object="${deliveryRequest}" method="post">
+            <div class="form-group">
+                <label for="customerName">고객명 *</label>
+                <input type="text" id="customerName" th:field="*{customerName}" 
+                       class="form-control" th:classappend="${#fields.hasErrors('customerName')} ? 'error'" 
+                       placeholder="배송받을 고객의 이름을 입력하세요">
+                <div class="error-message" th:if="${#fields.hasErrors('customerName')}" 
+                     th:errors="*{customerName}"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="productName">상품명 *</label>
+                <input type="text" id="productName" th:field="*{productName}" 
+                       class="form-control" th:classappend="${#fields.hasErrors('productName')} ? 'error'" 
+                       placeholder="배송할 상품의 이름을 입력하세요">
+                <div class="error-message" th:if="${#fields.hasErrors('productName')}" 
+                     th:errors="*{productName}"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="address">배송 주소 *</label>
+                <textarea id="address" th:field="*{address}" 
+                          class="form-control" th:classappend="${#fields.hasErrors('address')} ? 'error'" 
+                          placeholder="배송받을 주소를 상세히 입력하세요 (다중우주 좌표 포함)"></textarea>
+                <div class="error-message" th:if="${#fields.hasErrors('address')}" 
+                     th:errors="*{address}"></div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    ✨ 배송 등록하기
+                </button>
+                <a href="/deliveries" class="btn btn-secondary">
+                    ↩️ 목록으로
+                </a>
+            </div>
+        </form>
+    </div>
+    
+    <script>
+        // 폼 제출 시 로딩 상태 표시
+        document.querySelector('form').addEventListener('submit', function() {
+            const submitBtn = document.querySelector('button[type="submit"]');
+            submitBtn.innerHTML = '🔄 등록 중...';
+            submitBtn.disabled = true;
+        });
+    </script>
+</body>
+</html>
