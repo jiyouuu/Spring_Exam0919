@@ -23,7 +23,7 @@
         }
         
         .register-container {
-            max-width: 500px;
+            max-width: 550px;
             width: 100%;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 25px;
@@ -237,12 +237,12 @@
         </div>
         
         <!-- 회원가입 폼 -->
-        <form th:object="${userRegistration}" method="post">
+        <form  th:action="@{/register}" th:object="${userRegistrationDto}" method="post">
             <div class="form-group">
                 <label for="username">🆔 아이디 *</label>
                 <input type="text" id="username" th:field="*{username}" 
                        class="form-control" th:classappend="${#fields.hasErrors('username')} ? 'error'" 
-                       placeholder="4~20자의 영문, 숫자, 언더스코어">
+                       placeholder="2~20자의 영문, 숫자, 언더스코어">
                 <div class="error-message" th:if="${#fields.hasErrors('username')}" 
                      th:errors="*{username}"></div>
             </div>
@@ -251,7 +251,7 @@
                 <label for="password">🔐 비밀번호 *</label>
                 <input type="password" id="password" th:field="*{password}" 
                        class="form-control" th:classappend="${#fields.hasErrors('password')} ? 'error'" 
-                       placeholder="6자 이상의 안전한 비밀번호"
+                       placeholder="4자 이상의 안전한 비밀번호"
                        onkeyup="checkPasswordStrength(this.value)">
                 <div class="error-message" th:if="${#fields.hasErrors('password')}" 
                      th:errors="*{password}"></div>

@@ -21,7 +21,7 @@
         }
         
         .container {
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
@@ -141,8 +141,8 @@
         <div class="character-message">
             🐱 급하냥: "빨리빨리! 새로운 배송을 등록해주세요! 다중우주 고객들이 기다리고 있어요!"
         </div>
-        
-        <form th:object="${deliveryRequest}" method="post">
+
+        <form th:action = "@{/deliver/create}" th:object="${deliverDto}" method="post">
             <div class="form-group">
                 <label for="customerName">고객명 *</label>
                 <input type="text" id="customerName" th:field="*{customerName}" 
@@ -174,7 +174,7 @@
                 <button type="submit" class="btn btn-primary">
                     ✨ 배송 등록하기
                 </button>
-                <a href="/deliveries" class="btn btn-secondary">
+                <a href="/deliver/list" class="btn btn-secondary">
                     ↩️ 목록으로
                 </a>
             </div>

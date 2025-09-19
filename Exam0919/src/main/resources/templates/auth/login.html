@@ -24,7 +24,7 @@
         }
         
         .login-container {
-            max-width: 500px;
+            max-width: 550px;
             width: 100%;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 25px;
@@ -231,7 +231,7 @@
         </div>
         
         <!-- 로그인 폼 -->
-        <form method="post" action="/login">
+        <form method="post" th:action="@{/login}">
             <div class="form-group">
                 <label for="username">🆔 아이디</label>
                 <input type="text" id="username" name="username" class="form-control" 
@@ -254,22 +254,7 @@
             <a href="/">🏠 홈으로</a>
         </div>
         
-        <!-- 데모 계정 안내 -->
-        <div class="demo-accounts">
-            <h4>🎮 테스트 계정</h4>
-            <div class="demo-account">
-                <span><strong>급하냥:</strong> quickcat / password123</span>
-                <span class="role">관리자</span>
-            </div>
-            <div class="demo-account">
-                <span><strong>바쁘개:</strong> busydog / password123</span>
-                <span class="role">검사관</span>
-            </div>
-            <div class="demo-account">
-                <span><strong>고객:</strong> customer / password123</span>
-                <span class="role">일반사용자</span>
-            </div>
-        </div>
+     
     </div>
     
     <script>
@@ -279,18 +264,7 @@
             submitBtn.innerHTML = '🔄 로그인 중...';
             submitBtn.disabled = true;
         });
-        
-        // 데모 계정 클릭 시 자동 입력
-        document.querySelectorAll('.demo-account').forEach(account => {
-            account.addEventListener('click', function() {
-                const text = this.textContent;
-                const username = text.split(' / ').split(': ');
-                const password = text.split(' / ').split(' ');
-                
-                document.getElementById('username').value = username;
-                document.getElementById('password').value = password;
-            });
-        });
+       
     </script>
 </body>
 </html>
