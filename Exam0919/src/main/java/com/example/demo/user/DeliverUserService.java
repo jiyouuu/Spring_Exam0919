@@ -1,8 +1,10 @@
 package com.example.demo.user;
 
+import java.security.Principal;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import com.example.demo.deliver.DeliverRepository;
 import com.example.demo.exception.DuplicateUserException;
 
 import lombok.RequiredArgsConstructor;
@@ -10,9 +12,13 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class DeliverUserService {
+
+    private final DeliverRepository deliverRepository;
 	
 	private final DeliverUserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+
+
 	
 	public void register(UserRegistrationDto userRegistrationDto) {
 		// 이름 중복 검사 
@@ -37,6 +43,11 @@ public class DeliverUserService {
 					UserRole.USER);
 			this.userRepository.save(u);
 		}
+	}
+
+	public DeliverUser findCurrentUser(Principal principal) {
+		return this.userRepository.findByUsername(principal.getName())
+			.orElseThrow(() -> new IllegalArgumentException("회원 없음"));
 	}
 
 }

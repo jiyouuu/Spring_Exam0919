@@ -5,7 +5,6 @@ import java.util.Collection;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -43,7 +42,7 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 		return http
 				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/", "/login", "/register","/css/**", "/js/**", "/images/**","/favicon.ico","/h2-console/**").permitAll()
+						.requestMatchers("/", "/login","/register", "/css/**", "/js/**", "/images/**","/favicon.ico","/h2-console/**").permitAll()
 						.requestMatchers("/deliveries/create", "/api/deliveries/${deliveryId}/status").hasRole("ADMIN")
 						.requestMatchers("/api/deliveries/${deliveryId}/status").hasRole("INSPECTOR")
 						.anyRequest().authenticated() // 나머지는 인증 필요
@@ -131,10 +130,11 @@ public class SecurityConfig {
 	
 	
 	// 로그인 실패 핸들러 
+	// 실패 핸들러가 세션에 저장한 메시지를 로그인 페이지 GET 요청 시 꺼내서 뷰로 넘김
 	@Component
 	public static class UserAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
-		@Override
+		@Override							// HttpServletRequest 클라이언트(브라우저 등)가 서버에 보낸 HTTP 요청을 나타내는 객체
 		public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 				AuthenticationException exception) throws IOException {
 			

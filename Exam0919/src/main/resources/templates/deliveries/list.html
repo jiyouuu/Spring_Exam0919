@@ -251,6 +251,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
@@ -258,12 +259,12 @@
             <p class="subtitle">급하냥의 다중우주 택배 관리 시스템</p>
         </div>
         
-        <div class="user-info">
+     <div class="user-info">
             <span th:text="${currentUser.role.displayName}">사용자</span>
             <span th:text="${currentUser.username}">username</span>
             님 환영합니다!
         </div>
-        
+   
         <div class="controls">
             <form class="search-form" method="get">
                 <input type="text" name="keyword" class="search-input" 
@@ -273,12 +274,12 @@
             </form>
             
             <div sec:authorize="hasRole('ADMIN')">
-                <a href="/deliveries/create" class="btn btn-success">✨ 새 배송 등록</a>
+                <a href="/deliver/create" class="btn btn-success">✨ 새 배송 등록</a>
             </div>
         </div>
         
         <div class="delivery-grid" th:if="${!deliveries.empty}">
-            <div class="delivery-card" th:each="delivery : ${deliveries.content}">
+            <div class="delivery-card" th:each="delivery : ${deliveries}">
                 <input type="hidden" class="delivery-id-hidden" th:value="${delivery.id}">
                 
                 <div class="delivery-header">
@@ -332,7 +333,7 @@
         </div>
         
         <!-- 페이징 -->
-        <div class="pagination" th:if="${deliveries.totalPages > 1}">
+<!--      <div class="pagination" th:if="${deliveries.totalPages > 1}">
             <a th:if="${deliveries.hasPrevious()}" 
                th:href="@{/deliveries(page=${deliveries.number - 1}, keyword=${keyword})}">이전</a>
                
@@ -346,7 +347,8 @@
             
             <a th:if="${deliveries.hasNext()}" 
                th:href="@{/deliveries(page=${deliveries.number + 1}, keyword=${keyword})}">다음</a>
-        </div>
+        </div> 
+		-->  
     </div>
     
     <script>

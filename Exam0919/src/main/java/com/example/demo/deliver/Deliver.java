@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.example.demo.user.DeliverUser;
 
+import groovy.transform.builder.Builder;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -50,6 +51,30 @@ public class Deliver {
 	protected void onUpdate() {
 		this.updateAt = LocalDateTime.now();
 	}
+
+//	public Deliver(String customerName, String address, String productName, DeliveryStatus status, DeliverUser user,
+//			LocalDateTime createdAt) {
+//		this.customerName = customerName;
+//		this.address = address;
+//		this.productName = productName;
+//		this.status = status;
+//		this.user = user;
+//		this.createdAt = createdAt;
+//	}
+	
+	@Builder
+	public Deliver(String customerName, String address, String productName, DeliveryStatus status, DeliverUser user) {
+		this.customerName = customerName;
+		this.address = address;
+		this.productName = productName;
+		this.status = status;
+		this.user = user;
+	}
+	
+	public void updateStatus(DeliveryStatus status) {
+		this.status = status;
+	}
+	
 }
 
 

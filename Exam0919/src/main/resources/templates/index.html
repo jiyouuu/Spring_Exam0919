@@ -266,12 +266,14 @@
             </div>
             
             <div sec:authorize="isAuthenticated()">
-                <a href="/deliveries" class="btn btn-success">
+                <a href="/deliver/list" class="btn btn-success">
                      택배 관리 시작하기
                 </a>
-                <a href="/logout" class="btn btn-secondary">
-                     로그아웃
-                </a>
+				<!-- logout 처리  등 post방식 이면 th:action = "@{/~}" 코드 이용해서 할 것!!!!!!!!!-->
+				<form th:action = "@{/logout}" method="post" style="display:inline;">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> 
+					<button type = "submit" class="btn btn-secondary">로그아웃</button>
+				</form>
             </div>
         </div>
         

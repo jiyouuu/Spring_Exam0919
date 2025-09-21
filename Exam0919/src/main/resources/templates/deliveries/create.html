@@ -152,6 +152,19 @@
                      th:errors="*{customerName}"></div>
             </div>
             
+			<div class="form-group">
+			    <label for="user">배송 대상 회원 *</label>
+			    <select id="user" th:field="*{userId}" 
+			            class="form-control" th:classappend="${#fields.hasErrors('userId')} ? 'error'">
+			        <option value="">-- 회원을 선택하세요 --</option>
+			        <option th:each="u : ${users}" 
+			                th:value="${u.id}" 
+			                th:text="${u.username}">회원명</option>
+			    </select>
+			    <div class="error-message" th:if="${#fields.hasErrors('userId')}" 
+			         th:errors="*{userId}"></div>
+			</div>
+			
             <div class="form-group">
                 <label for="productName">상품명 *</label>
                 <input type="text" id="productName" th:field="*{productName}" 

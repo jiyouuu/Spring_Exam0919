@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DeliveryRequestDTO {
-	
-
+	private String status;
 }
+// status: newStatus 

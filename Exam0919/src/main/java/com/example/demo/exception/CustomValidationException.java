@@ -1,8 +1,11 @@
 package com.example.demo.exception;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.validation.BindingResult;
+
+import com.example.demo.user.DeliverUser;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +21,5 @@ public class CustomValidationException extends RuntimeException{
 	private BindingResult bindingResult;
 	
 	private Map<String, String> errors;
-	
 
 }

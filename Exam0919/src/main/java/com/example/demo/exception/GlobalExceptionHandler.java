@@ -7,12 +7,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.example.demo.user.DeliverUserRepository;
+import com.example.demo.user.UserRole;
 
+import lombok.RequiredArgsConstructor;
+
+
+@RequiredArgsConstructor
 					//이 파일은 전체 예외처리를 관리하려고 만들어둔 파일
 @ControllerAdvice    // Controller에 관련된 전역(글로벌) 설정을 처리할 때 사용
 public class GlobalExceptionHandler {
 	
-	
+	private final DeliverUserRepository userRepository;
 	// 캐릭터의 말(quote)을 랜덤으로 보여주기 위해 사용
 	private final Random random = new Random();
 	
@@ -57,14 +63,24 @@ public class GlobalExceptionHandler {
 	 
 
 	// 유효성 검사 실패 처리
-	 @ExceptionHandler(CustomValidationException.class)
+	@ExceptionHandler(CustomValidationException.class)
 	 public String validationException(CustomValidationException e, Model model) {
-		 model.addAttribute("userRegistrationDto", e.getBindingResult().getTarget());    // BindingResult 안에는 검증 대상 객체(DTO)가 들어있음
-		 																				// 그래서 폼에서 입력한 그대로 DTO 뷰에 보내는거임 
-		 // BindingResult.{DTO이름} 으로 보내야, th:errors나 #fields.hasErrors()가 정상 작동함 
-		 model.addAttribute("org.springframework.validation.BindingResult.userRegistrationDto", e.getBindingResult()); // 유효성 에러 표시를 위해 BindingResult객체를 연결 
+		 if(e.getBindingResult().getObjectName().equals("userRegistrationDto")) {
+			 model.addAttribute("userRegistrationDto", e.getBindingResult().getTarget());    // BindingResult 안에는 검증 대상 객체(DTO)가 들어있음
+				// 그래서 폼에서 입력한 그대로 DTO 뷰에 보내는거임 
+			 // BindingResult.{DTO이름} 으로 보내야, th:errors나 #fields.hasErrors()가 정상 작동함 
+			 model.addAttribute("org.springframework.validation.BindingResult.userRegistrationDto", e.getBindingResult()); // 유효성 에러 표시를 위해 BindingResult객체를 연결 
+
+			 return "auth/register";
+		 }
+		 if(e.getBindingResult().getObjectName().equals("deliverDto")) {
+			 model.addAttribute("deliverDto", e.getBindingResult().getTarget());
+			 model.addAttribute("org.springframework.validation.BindingResult.deliverDto", e.getBindingResult());
+			 model.addAttribute("users", this.userRepository.findByRoleNot(UserRole.ADMIN));
+		 }
 		 
-		 return "auth/register";
+		 return "deliveries/create";
+		
 	 }
 
 	

@@ -14,6 +14,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.exception.CustomValidationException;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -24,10 +26,20 @@ public class DeliverUserController {
 	private final DeliverUserService userService;
 	
 	@GetMapping("/login")
-	public String login(@RequestParam(name = "error", required = false) String error, @RequestParam(name = "logout", required = false) String logout, Model model) {
+	public String login(HttpServletRequest request, @RequestParam(name = "error", required = false) String error, @RequestParam(name = "logout", required = false) String logout, Model model) {
 		if("true".equals(error)) {
-			model.addAttribute("errorMessage", "아이디 또는 비밀번호가 올바르지 않습니다! 다시 시도해주세요! ");
+			// 세션에서 error꺼내기 
+			HttpSession session = request.getSession(false);  // 현재 요청에 연결된 세션이 있으면 그 세션을 반환하고, 없다면 세션을 새로 생성하지 않고 null을 반환
+															  // request.getSession() 또는 request.getSession(true)는 세션이 없으면 새로 만들어서 반환
+			if(session != null) {
+				String errorMessage = (String) session.getAttribute("errorMessage");
+				model.addAttribute("errorMessage", errorMessage);
+			// 메시지를 한번 꺼내고 제거해서, 새로고침 시 메시지가 계속 나오지 않도록 함
+				session.removeAttribute("errorMessage");   
+			}
+			
 		} 
+		
 		if("true".equals(logout)){
 			model.addAttribute("logoutMessage", "안전하게 나가셨네요 ! 다음에도 배송 확인하러 오세요 ! ");
 		}
@@ -68,7 +80,6 @@ public class DeliverUserController {
 		return "redirect:/login?success";
 		
 	}
-	
 	
 	
 	@PostMapping("/logout")
