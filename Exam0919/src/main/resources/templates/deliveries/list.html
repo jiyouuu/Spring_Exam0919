@@ -250,6 +250,8 @@
             cursor: pointer;
         }
     </style>
+	<meta name="_csrf" th:content="${_csrf.token}">
+	<meta name="_csrf_header" th:content="${_csrf.headerName}">
 </head>
 
 <body>
@@ -259,12 +261,14 @@
             <p class="subtitle">급하냥의 다중우주 택배 관리 시스템</p>
         </div>
         
-     <div class="user-info">
-            <span th:text="${currentUser.role.displayName}">사용자</span>
-            <span th:text="${currentUser.username}">username</span>
-            님 환영합니다!
-        </div>
+	    <div class="user-info">
+	            <span th:text="${currentUser.role.displayName}">사용자</span>
+	            <span th:text="${currentUser.username}">username</span>
+	            님 환영합니다!
+	    </div>
    
+		<a href="/" class="btn btn-success">✨ 메인으로 가기 </a>
+		
         <div class="controls">
             <form class="search-form" method="get">
                 <input type="text" name="keyword" class="search-input" 
@@ -285,7 +289,7 @@
                 <div class="delivery-header">
                     <span class="delivery-id" th:text="'배송 #' + ${delivery.id}">배송 #1</span>
                     
-                    <div sec:authorize="hasRole('ADMIN') or hasRole('INSPECTOR')">
+                    <div sec:authorize="hasRole('ADMIN') || hasRole('INSPECTOR')">
                         <select class="status-select" 
                                 th:attr="data-delivery-id=${delivery.id}"
                                 onchange="updateDeliveryStatus(this)">
@@ -300,7 +304,7 @@
                     
                     <div sec:authorize="hasRole('USER')">
                         <span class="status-badge" th:class="'status-badge status-' + ${delivery.status}"
-                              th:text="${delivery.statusDisplay}">상태</span>
+                              th:text="${delivery.status.displayName}">상태</span>
                     </div>
                 </div>
                 
@@ -317,7 +321,7 @@
                 </div>
                 
                 <div class="delivery-actions">
-                    <a th:href="'/deliveries/' + ${delivery.id}" class="btn btn-primary">📋 상세보기</a>
+                    <a th:href="'/deliver/' + ${delivery.id}" class="btn btn-primary">📋 상세보기</a>
                 </div>
             </div>
         </div>
@@ -356,23 +360,30 @@
         async function updateDeliveryStatus(selectElement) {
             const deliveryId = selectElement.getAttribute('data-delivery-id');
             const newStatus = selectElement.value;
+			const token = document.querySelector('meta[name="_csrf"]').getAttribute("content");
+			const header = document.querySelector('meta[name="_csrf_header"]').getAttribute("content");
             
             try {
                 const response = await fetch(`/api/deliveries/${deliveryId}/status`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
+					 	[header] : token    // 헤더와 토큰을 보내야 fetch가 제대로 진행됨 !!! (csrf 걸었기 때문에)
                     },
+					
                     body: JSON.stringify({ status: newStatus })
                 });
                 
                 if (response.ok) {
                     const updatedDelivery = await response.json();
-                    showNotification(`배송 상태가 ${updatedDelivery.statusDisplay}로 변경되었습니다!`, 'success');
-                    
-                    // 누렁이가 먹은 경우 특별 알림
-                    if (updatedDelivery.status === 'EATEN_BY_NURYEONG') {
-                        showNotification('🐕 누렁이: "어? 이 기억 맛있네! 냠냠!"', 'warning');
+					// 누렁이가 먹은 경우 특별 알림
+					if(updatedDelivery.status === 'EATEN_BY_NURYEONG'){
+						showNotification(`배송 상태가 ${updatedDelivery.statusDisplay}로 변경되었습니다!
+						<br>🐕 누렁이: "어? 이 기억 맛있네! 냠냠!`, 'warning');
+					}
+                 
+                   else {
+						showNotification(`배송 상태가 ${updatedDelivery.statusDisplay}로 변경되었습니다!`, 'success');
                     }
                     
                     // 페이지 새로고침 (실제로는 해당 카드만 업데이트하는 것이 더 좋음)

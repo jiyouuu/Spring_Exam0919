@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 QuickCat Express - 배송 상세</title>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 2rem;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .delivery-detail {
+            margin-top: 20px;
+        }
+        .detail-row {
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+        .detail-row strong {
+            display: inline-block;
+            width: 120px;
+            color: #444;
+        }
+        .status-badge {
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        .status-ORDERED { background: #e3f2fd; color: #1976d2; }
+        .status-PROCESSING { background: #fff3e0; color: #f57c00; }
+        .status-SHIPPING { background: #e8f5e8; color: #388e3c; }
+        .status-DELIVERED { background: #f3e5f5; color: #7b1fa2; }
+        .status-EATEN_BY_NURYEONG { background: #ffebee; color: #d32f2f; }
+        .actions {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .btn {
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-back { background: linear-gradient(45deg, #4ECDC4, #44A08D); }
+        .btn-edit { background: linear-gradient(45deg, #f093fb, #f5576c); }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📋 배송 상세</h1>
+    </div>
+
+    <div class="delivery-detail">
+        <div class="detail-row">
+            <strong>배송 ID:</strong> <span th:text="${delivery.id}">1</span>
+        </div>
+        <div class="detail-row">
+            <strong>고객명:</strong> <span th:text="${delivery.customerName}">홍길동</span>
+        </div>
+        <div class="detail-row">
+            <strong>상품:</strong> <span th:text="${delivery.productName}">우주 택배 박스</span>
+        </div>
+        <div class="detail-row">
+            <strong>주소:</strong> <span th:text="${delivery.address}">서울특별시 은하구</span>
+        </div>
+        <div class="detail-row">
+            <strong>등록일:</strong>
+            <span th:text="${#temporals.format(delivery.createdAt, 'yyyy-MM-dd HH:mm')}">2025-09-21 10:00</span>
+        </div>
+        <div class="detail-row" th:if="${delivery.updatedAt}">
+            <strong>업데이트:</strong>
+            <span th:text="${#temporals.format(delivery.updatedAt, 'yyyy-MM-dd HH:mm')}">2025-09-22 12:00</span>
+        </div>
+
+        <div class="detail-row">
+            <strong>상태:</strong>
+            <span class="status-badge" th:class="'status-badge status-' + ${delivery.status}"
+                  th:text="${delivery.status.displayName}">배송중</span>
+        </div>
+
+    </div>
+
+    <div class="actions">
+        <a href="/deliver/list" class="btn btn-back">⬅ 목록으로</a>
+     <!--  <div sec:authorize="hasRole('ADMIN')">
+            <a th:href="'/deliver/edit/' + ${delivery.id}" class="btn btn-edit">✏ 수정하기</a>
+        </div> 
+		--> 
+    </div>
+</div>
+
+
+</body>
+</html>

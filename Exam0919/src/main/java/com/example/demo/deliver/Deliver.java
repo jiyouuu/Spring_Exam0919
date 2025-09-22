@@ -39,7 +39,7 @@ public class Deliver {
 	private LocalDateTime createdAt;
 	
 	@Column
-	private LocalDateTime updateAt;
+	private LocalDateTime updatedAt;
 	
 	
 	@PrePersist
@@ -49,7 +49,7 @@ public class Deliver {
 	
 	@PreUpdate
 	protected void onUpdate() {
-		this.updateAt = LocalDateTime.now();
+		this.updatedAt = LocalDateTime.now();
 	}
 
 //	public Deliver(String customerName, String address, String productName, DeliveryStatus status, DeliverUser user,
